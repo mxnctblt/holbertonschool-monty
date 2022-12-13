@@ -62,6 +62,7 @@ void op_choose(stack_t **stack, char *opcode)
 		{"pint", pint},
 		{"pop", pop},
 		{"swap", swap},
+		{"add", add},
 		{"nop", nop},
 		{NULL, NULL}
 	};
