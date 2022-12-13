@@ -74,4 +74,6 @@ void pint(stack_t **stack, unsigned int linenumber);
 
 void pop(stack_t **stack, unsigned int linenumber);
 
+void swap(stack_t **stack, __attribute__((unused))unsigned int linenumber);
+
 #endif
