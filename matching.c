@@ -60,6 +60,7 @@ void op_choose(stack_t **stack, char *opcode)
 	instruction_t functions[] = {
 		{"pall", pall},
 		{"pint", pint},
+		{"pop", pop},
 		{NULL, NULL}
 	};
 
