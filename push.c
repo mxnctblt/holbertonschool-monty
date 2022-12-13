@@ -1,36 +1,62 @@
 #include "monty.h"
 
 /**
- * push - function that push an element on the stack
- * @stack: pointer to the head stack.
- * @line_number: line number in file.
- * Return: nothing.
+ * push - add node to list
+ * @argument: int
  */
-
-void push(stack_t **stack, unsigned int line_number)
+void push(char *argument)
 {
-	stack_t *node = NULL;
-	stack_t *copy = *stack;
-	(void)line_number;
+	int data;
+	stack_t *new;
 
-	if (stack == NULL)
+	if (!check_input(argument))
 	{
-		fprintf(stderr, "L%d: usage: push integer\n", line_number);
-		var_glob[1] = 1;
-		return;
+		dprintf(STDERR_FILENO, "L%u: usage: push integer\n"
+			, monty.line_number);
+		freeall();
+		exit(EXIT_FAILURE);
 	}
-	node = malloc(sizeof(stack_t));
-	if (node == NULL)
+
+	data = atoi(argument);
+	new = malloc(sizeof(stack_t));
+	if (!new)
 	{
-		fprintf(stderr, "Error: malloc failed\n");
-		free(stack);
-		var_glob[1] = 1;
-		return;
+		dprintf(STDERR_FILENO, "Error: malloc failed\n");
+		freeall();
+		exit(EXIT_FAILURE);
 	}
-	node->prev = NULL;
-	node->n = var_glob[0];
-	node->next = *stack;
-	if (*stack)
-		copy->prev = node;
-	*stack = node;
+	new->n = data;
+	new->next = monty.stack;
+	new->prev = NULL;
+	if (new->next)
+		new->next->prev = new;
+	monty.stack = new;
+}
+
+/**
+ * check_input - check if int
+ * @str: the string we check
+ *
+ * Return: false unless int
+ */
+bool check_input(char *str)
+{
+	int i = 0;
+
+	if (!str)
+	{
+		return (false);
+	}
+	if (str[0] != '-' && !isdigit(str[0]))
+	{
+		return (false);
+	}
+	for (i = 1; str[i]; i++)
+	{
+		if (!isdigit(str[i]))
+		{
+			return (false);
+		}
+	}
+	return (true);
 }

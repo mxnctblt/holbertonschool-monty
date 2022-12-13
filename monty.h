@@ -1,14 +1,15 @@
-#ifndef _MONTY_H_
-#define _MONTY_H_
+#ifndef __MONTY__H
+#define __MONTY__H
 
-#include <stdlib.h>
 #include <stdio.h>
-#include <string.h>
-#include <errno.h>
-#include <limits.h>
 #include <unistd.h>
+#include <string.h>
+#include <stdlib.h>
+#include <ctype.h>
+#include <stdarg.h>
+#include <errno.h>
+#include <stdbool.h>
 
-int var_glob[2];
 
 /**
  * struct stack_s - doubly linked list representation of a stack (or queue)
@@ -40,11 +41,34 @@ typedef struct instruction_s
 	void (*f)(stack_t **stack, unsigned int line_number);
 } instruction_t;
 
-void pall(stack_t **stack, unsigned int line_number);
-void push(stack_t **stack, unsigned int line_number);
-void functions_monty(stack_t **stack, char *command_f, unsigned int line_numb);
-char *read_lines(char *buffer, unsigned int line_number);
-void free_malloc(stack_t *head);
+/**
+ * struct monty_s - global struct to hold all the things
+ * @file: monty file
+ * @line: line we are interpreting
+ * @stack: the stack
+ * @line_number: current line number read
+ */
+typedef struct monty_s
+{
+	FILE *file;
+	char *line;
+	stack_t *stack;
+	unsigned int line_number;
+} monty_t;
+
+extern monty_t monty;
+
+void openfile(int argc, char *filename);
+void read_line(void);
+void op_choose(stack_t **stack, char *opcode);
+void initialize(void);
+void freeall(void);
+void freestack(stack_t *h);
+bool check_input(char *str);
+
+void push(char *argument);
+
+void pall(stack_t **stack, unsigned int linenumber);
 
 
 #endif

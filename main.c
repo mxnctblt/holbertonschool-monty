@@ -1,85 +1,59 @@
 #include "monty.h"
 
+monty_t monty;
+
 /**
- *read_lines - read lines to arguments
- *@buffer: contain all
- *@line_number: count to lines inside the file
- *Return: Tokens
+ * main - entry point
+ * @argc: args count
+ * @argv: args vector
+ *
+ * Return: EXIT_SUCCESS
  */
-
-char *read_lines(char *buffer, unsigned int line_number)
+int main(int argc, char **argv)
 {
-	char *token = NULL, *num_t = NULL;
-	long int i = 0;
 
-	token = strtok(buffer, " \t\n");
-	if (strcmp(token, "push") == 0)
-	{
-		num_t = strtok(NULL, " \t\n");
-		if (num_t == NULL)
-		{
-			fprintf(stderr, "L%u: usage: push integer\n", line_number);
-			free(buffer);
-			var_glob[1] = 1;
-			return (NULL);
-		}
-		for (i = 0; num_t[i] != '\0'; i++)
-		{
-			if (num_t[i] == '-')
-				i++;
-			if (num_t[i] < 48 || num_t[i] > 57)
-			{
-				fprintf(stderr, "L%u: usage: push integer\n", line_number);
-				free(buffer);
-				var_glob[1] = 1;
-				return (NULL);
-			}
-		}
-		var_glob[0] = atoi(num_t);
-	}
-	return (token);
+	initialize();
+	openfile(argc, argv[1]);
+	read_line();
+	freeall();
+	return (EXIT_SUCCESS);
 }
 
 /**
- *main - execute the monty interpreter
- *@argc: count number to arguments per line
- *@argv: array to arguments
- *Return: 0 if no exist or exit failure in case to error
+ *  initialize - initialize the struct
  */
-
-int main(int argc, char *argv[])
+void initialize(void)
 {
-	stack_t *stack = NULL;
-	FILE *file;
-	char *buffer = NULL, *command_f = NULL;
-	size_t size = 0;
-	unsigned int line_number = 0;
 
-	if (argc != 2)
+	monty.file = NULL;
+	monty.line = NULL;
+	monty.stack = NULL;
+	monty.line_number = 1;
+}
+
+/**
+ * freeall - frees our file
+ */
+void freeall(void)
+{
+	fclose(monty.file);
+	free(monty.line);
+	freestack(monty.stack);
+}
+
+/**
+ * freestack - frees the stack
+ * @h: the head of stack
+ */
+void freestack(stack_t *h)
+{
+	stack_t *temp;
+	stack_t *loc = h;
+
+	while (loc)
 	{
-		fprintf(stderr, "USAGE: monty file\n");
-		exit(EXIT_FAILURE);
+		temp = loc;
+		loc = loc->next;
+		free(temp);
 	}
-	file = fopen(argv[1], "r");
-	if (file == NULL)
-	{
-		fprintf(stderr, "Error: Can't open file %s\n", argv[1]);
-		exit(EXIT_FAILURE);
-	}
-	while (getline(&buffer, &size, file) != EOF)
-	{
-		line_number++;
-		if (strlen(buffer) == 1 || strspn(buffer, " \t\n") == strlen(buffer))
-			continue;
-		command_f = read_lines(buffer, line_number);
-		if (command_f == NULL)
-			break;
-		functions_monty(&stack, command_f, line_number);
-	}
-	free(buffer);
-	free_malloc(stack);
-	fclose(file);
-	if (var_glob[1] == 1)
-		exit(EXIT_FAILURE);
-	exit(EXIT_SUCCESS);
 }
