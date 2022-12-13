@@ -76,4 +76,6 @@ void pop(stack_t **stack, unsigned int linenumber);
 
 void swap(stack_t **stack, __attribute__((unused))unsigned int linenumber);
 
+void nop(stack_t **stack, __attribute__((unused))unsigned int linenumber);
+
 #endif
