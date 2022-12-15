@@ -64,6 +64,10 @@ void op_choose(stack_t **stack, char *opcode)
 		{"swap", swap},
 		{"add", add},
 		{"nop", nop},
+		{"sub", sub},
+		{"div", divising},
+		{"mul", mul},
+		{"mod", mod},
 		{NULL, NULL}
 	};
 

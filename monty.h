@@ -80,4 +80,12 @@ void add(stack_t **stack, unsigned int linenumber);
 
 void nop(stack_t **stack, __attribute__((unused))unsigned int linenumber);
 
+void sub(stack_t **stack, unsigned int linenumber);
+
+void divising(stack_t **stack, unsigned int linenumber);
+
+void mul(stack_t **stack, unsigned int linenumber);
+
+void mod(stack_t **stack, unsigned int linenumber);
+
 #endif
